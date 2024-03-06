@@ -21,11 +21,11 @@ find_package(CoppeliaSim 4.6.0 REQUIRED)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "" FORCE)
 
 coppeliasim_add_plugin(
-    ${PROJECT_NAME}
+    simKeyboard
     LEGACY
     SOURCES
     ${PROJECT_SOURCE_DIR}/source/simKeyboard.cpp
 )
 # cmake-format: on
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(simKeyboard PUBLIC ${PROJECT_SOURCE_DIR}/include)

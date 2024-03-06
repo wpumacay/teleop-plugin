@@ -2,6 +2,8 @@
 
 #include <simLib/simLib.h>
 
+#define PLUGIN_VERSION 6
+
 // NOLINTNEXTLINE
 static LIBRARY simLib;
 
@@ -25,7 +27,7 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
     simAddLog(info->pluginName, sim_verbosity_infos,
               "Successfully initialized plugin");
 
-    return 3;
+    return PLUGIN_VERSION;
 }
 
 SIM_DLLEXPORT auto simMsg(SSimMsg* info) -> void {}

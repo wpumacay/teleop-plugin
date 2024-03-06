@@ -1,14 +1,12 @@
 [
 {
-  "directory": "/home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/build",
-  "command": "/usr/bin/clang++ -DBOOST_REGEX_DYN_LINK -DBOOST_REGEX_NO_LIB -DLIN_SIM -DSIM_REQUIRED_PROGRAM_VERSION_NB=4060000 -DSimKeyboaard_EXPORTS -I/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include -I/home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/include -std=gnu++17 -fPIC -fvisibility=hidden -o CMakeFiles/SimKeyboaard.dir/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp.o -c /home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp",
-  "file": "/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp",
-  "output": "CMakeFiles/SimKeyboaard.dir/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp.o"
+  "directory": "/home/gregor/workspace/uwcse-research/teleop-plugin/build",
+  "command": "/usr/bin/clang++ -DBOOST_ALL_NO_LIB -DBOOST_REGEX_DYN_LINK -DLIN_SIM -DSIM_REQUIRED_PROGRAM_VERSION_NB=4060000 -DsimKeyboard_EXPORTS -I/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include -I/home/gregor/workspace/uwcse-research/teleop-plugin/include -fPIC -fvisibility=hidden -std=gnu++17 -o CMakeFiles/simKeyboard.dir/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp.o -c /home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp",
+  "file": "/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include/simLib/simLib.cpp"
 },
 {
-  "directory": "/home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/build",
-  "command": "/usr/bin/clang++ -DBOOST_REGEX_DYN_LINK -DBOOST_REGEX_NO_LIB -DLIN_SIM -DSIM_REQUIRED_PROGRAM_VERSION_NB=4060000 -DSimKeyboaard_EXPORTS -I/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include -I/home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/include -std=gnu++17 -fPIC -fvisibility=hidden -o CMakeFiles/SimKeyboaard.dir/source/simKeyboard.cpp.o -c /home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/source/simKeyboard.cpp",
-  "file": "/home/gregor/workspace/uwcse-research/teleop_rlbench/teleop-plugin/source/simKeyboard.cpp",
-  "output": "CMakeFiles/SimKeyboaard.dir/source/simKeyboard.cpp.o"
+  "directory": "/home/gregor/workspace/uwcse-research/teleop-plugin/build",
+  "command": "/usr/bin/clang++ -DBOOST_ALL_NO_LIB -DBOOST_REGEX_DYN_LINK -DLIN_SIM -DSIM_REQUIRED_PROGRAM_VERSION_NB=4060000 -DsimKeyboard_EXPORTS -I/home/gregor/workspace/coppelia-sim/CoppeliaSim_Edu_V4_6_0_rev18_Ubuntu22_04/programming/include -I/home/gregor/workspace/uwcse-research/teleop-plugin/include -fPIC -fvisibility=hidden -std=gnu++17 -o CMakeFiles/simKeyboard.dir/source/simKeyboard.cpp.o -c /home/gregor/workspace/uwcse-research/teleop-plugin/source/simKeyboard.cpp",
+  "file": "/home/gregor/workspace/uwcse-research/teleop-plugin/source/simKeyboard.cpp"
 }
 ]
