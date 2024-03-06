@@ -13,6 +13,9 @@ else()
   message(FATAL_ERROR "Please define the environment variable COPPELIASIM_ROOT")
 endif()
 
+find_package(glfw3 3.3 REQUIRED)
+find_package(OpenGL REQUIRED)
+
 list(APPEND CMAKE_MODULE_PATH ${COPPELIASIM_PROG_PATH}/cmake)
 
 find_package(CoppeliaSim 4.6.0 REQUIRED)
@@ -29,3 +32,4 @@ coppeliasim_add_plugin(
 # cmake-format: on
 
 target_include_directories(simKeyboard PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(simKeyboard PUBLIC glfw OpenGL::GL)
