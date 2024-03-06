@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <thread>
 
 #define PLUGIN_VERSION 6
 
@@ -12,6 +13,31 @@
 static LIBRARY simLib;
 
 static GLFWwindow* g_window = nullptr;
+
+auto worker_fcn() -> void {
+    if(g_window == nullptr) {
+        return;
+    }
+
+    glfwSetKeyCallback(g_window, [](GLFWwindow* window, int key, int scancode,
+                                    int action, int mods) {
+        if (action == GLFW_PRESS) {
+            std::cout << "Key pressed: " << key << std::endl;
+        }
+
+        if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+    });
+
+    while (glfwWindowShouldClose(g_window) == GLFW_FALSE) {
+        std::cout << "Hello from worker thread" << std::endl;
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(g_window);
+        glfwPollEvents();
+    }
+}
 
 SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
     simLib = loadSimLibrary(info->coppeliaSimLibPath);
@@ -44,6 +70,9 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
     }
 
     std::cout << "Hello World!" << std::endl;
+
+    std::thread worker_thread(&worker_fcn);
+    worker_thread.join();
 
     return PLUGIN_VERSION;
 }
