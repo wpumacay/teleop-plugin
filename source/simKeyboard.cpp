@@ -12,6 +12,8 @@
 // NOLINTNEXTLINE
 static LIBRARY simLib;
 
+static std::thread g_thread;
+
 static GLFWwindow* g_window = nullptr;
 
 auto worker_fcn() -> void {
@@ -21,7 +23,7 @@ auto worker_fcn() -> void {
 
     glfwSetKeyCallback(g_window, [](GLFWwindow* window, int key, int scancode,
                                     int action, int mods) {
-        if (action == GLFW_PRESS) {
+        if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             std::cout << "Key pressed: " << key << std::endl;
         }
 
@@ -31,8 +33,6 @@ auto worker_fcn() -> void {
     });
 
     while (glfwWindowShouldClose(g_window) == GLFW_FALSE) {
-        std::cout << "Hello from worker thread" << std::endl;
-
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(g_window);
         glfwPollEvents();
@@ -69,14 +69,16 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
         return 0;
     }
 
-    std::cout << "Hello World!" << std::endl;
-
-    std::thread worker_thread(&worker_fcn);
-    worker_thread.join();
+    g_thread = std::thread(&worker_fcn);
+    // Should move the join to the cleanup function
+    g_thread.join();
+    glfwTerminate();
 
     return PLUGIN_VERSION;
 }
 
 SIM_DLLEXPORT auto simMsg(SSimMsg* info) -> void {}
 
-SIM_DLLEXPORT auto simCleanup() -> void { unloadSimLibrary(simLib); }
+SIM_DLLEXPORT auto simCleanup() -> void { 
+    unloadSimLibrary(simLib);
+}
