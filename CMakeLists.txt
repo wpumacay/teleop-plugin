@@ -14,6 +14,8 @@ else()
 endif()
 
 find_package(OpenGL REQUIRED)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vendor/glfw)
 
 list(APPEND CMAKE_MODULE_PATH ${COPPELIASIM_PROG_PATH}/cmake)
