@@ -16,16 +16,6 @@ endif()
 find_package(OpenGL REQUIRED)
 add_subdirectory(${PROJECT_SOURCE_DIR}/vendor/glfw)
 
-set(IMGUI_SOURCES
-${PROJECT_SOURCE_DIR}/vendor/imgui/imgui.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_demo.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_draw.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_tables.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_glfw.cpp
-${PROJECT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_opengl3.cpp
-)
-
 list(APPEND CMAKE_MODULE_PATH ${COPPELIASIM_PROG_PATH}/cmake)
 
 find_package(CoppeliaSim 4.6.0 REQUIRED)
@@ -38,10 +28,22 @@ coppeliasim_add_plugin(
     LEGACY
     SOURCES
     ${PROJECT_SOURCE_DIR}/source/simKeyboard.cpp
-    ${IMGUI_SOURCES}
+    # Dear ImGui sources
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_demo.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_draw.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_tables.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_glfw.cpp
+    ${PROJECT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_opengl3.cpp
+    # GLAD source
+    ${PROJECT_SOURCE_DIR}/vendor/glad/src/glad.c
 )
 # cmake-format: on
 
 target_include_directories(simKeyboard PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_include_directories(simKeyboard PUBLIC ${PROJECT_SOURCE_DIR}/vendor/imgui/)
+target_include_directories(simKeyboard
+                           PUBLIC ${PROJECT_SOURCE_DIR}/vendor/imgui/)
+target_include_directories(simKeyboard
+                           PUBLIC ${PROJECT_SOURCE_DIR}/vendor/glad/include)
 target_link_libraries(simKeyboard PUBLIC glfw OpenGL::GL)

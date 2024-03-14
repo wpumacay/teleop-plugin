@@ -1,37 +1,38 @@
+#include <iostream>
+#include <thread>
+
 #include <simKeyboard.hpp>
 
 #include <simLib/simLib.h>
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-#include <iostream>
-#include <thread>
-
 #define PLUGIN_VERSION 6
 
 // NOLINTNEXTLINE
 static LIBRARY simLib;
 
-static std::thread g_thread;
+static std::thread g_thread; // NOLINT
 
-static GLFWwindow* g_window = nullptr;
+static GLFWwindow* g_window = nullptr; // NOLINT
 
 auto worker_fcn() -> void {
-    if(g_window == nullptr) {
+    if (g_window == nullptr) {
         return;
     }
 
     glfwSetKeyCallback(g_window, [](GLFWwindow* window, int key, int scancode,
                                     int action, int mods) {
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
-            std::cout << "Key pressed: " << key << std::endl;
+            std::cout << "Key pressed: " << key << '\n';
         }
 
-        if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
     });
@@ -91,15 +92,23 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
         return 0;
     }
 
+    glfwMakeContextCurrent(g_window);
+    // NOLINTNEXTLINE
+    if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == GL_FALSE) {
+        std::cout << "Failed to initialize GLAD\n";
+        glfwTerminate();
+        return 0;
+    }
+
     // --------------------------------
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     // --------------------------------
     // Setup Dear ImGui style
@@ -125,6 +134,6 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
 
 SIM_DLLEXPORT auto simMsg(SSimMsg* info) -> void {}
 
-SIM_DLLEXPORT auto simCleanup() -> void { 
+SIM_DLLEXPORT auto simCleanup() -> void {
     unloadSimLibrary(simLib);
 }
