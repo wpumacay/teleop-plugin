@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <string>
 
 #include <simKeyboard.hpp>
 
@@ -22,9 +23,56 @@ static std::thread g_thread; // NOLINT
 static GLFWwindow* g_window = nullptr; // NOLINT
 
 auto worker_fcn() -> void {
-    if (g_window == nullptr) {
+    if (glfwInit() != GLFW_TRUE) {
         return;
     }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    g_window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+    if (g_window == nullptr) {
+        glfwTerminate();
+        return;
+    }
+
+    glfwMakeContextCurrent(g_window);
+    // NOLINTNEXTLINE
+    if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == GL_FALSE) {
+        std::cout << "Failed to initialize GLAD\n";
+        glfwTerminate();
+        return;
+    }
+
+    const std::string STR_VENDOR = 
+        reinterpret_cast<const char*>(glGetString(GL_VENDOR));  // NOLINT
+    const std::string STR_RENDERER =
+        reinterpret_cast<const char*>(glGetString(GL_RENDERER));  // NOLINT
+    const std::string STR_VERSION =
+        reinterpret_cast<const char*>(glGetString(GL_VERSION));  // NOLINT
+
+    std::cout << "Vendor    : " << STR_VENDOR << '\n';
+    std::cout << "Renderer  : " << STR_RENDERER << '\n';
+    std::cout << "Version   : " << STR_VERSION << '\n';
+
+    // --------------------------------
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+    // --------------------------------
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
+    // --------------------------------
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(g_window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
 
     glfwSetKeyCallback(g_window, [](GLFWwindow* window, int key, int scancode,
                                     int action, int mods) {
@@ -57,9 +105,14 @@ auto worker_fcn() -> void {
         // Render all ui-elements
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-
         glfwSwapBuffers(g_window);
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwTerminate();
 }
 
 SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
@@ -82,52 +135,9 @@ SIM_DLLEXPORT auto simInit(SSimInit* info) -> int {
     simAddLog(info->pluginName, sim_verbosity_infos,
               "Successfully initialized plugin");
 
-    if (glfwInit() != GLFW_TRUE) {
-        return 0;
-    }
-
-    g_window = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
-    if (g_window == nullptr) {
-        glfwTerminate();
-        return 0;
-    }
-
-    glfwMakeContextCurrent(g_window);
-    // NOLINTNEXTLINE
-    if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == GL_FALSE) {
-        std::cout << "Failed to initialize GLAD\n";
-        glfwTerminate();
-        return 0;
-    }
-
-    // --------------------------------
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-    // --------------------------------
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
-    // --------------------------------
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(g_window, true);
-    ImGui_ImplOpenGL3_Init("#version 130");
-
     g_thread = std::thread(&worker_fcn);
     // Should move the join to the cleanup function?
     g_thread.join();
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwTerminate();
 
     return PLUGIN_VERSION;
 }
